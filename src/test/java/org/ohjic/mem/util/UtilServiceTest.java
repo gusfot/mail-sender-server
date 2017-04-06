@@ -1,70 +1,64 @@
 package org.ohjic.mem.util;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.junit.Test;
 
 public class UtilServiceTest {
 
 	@Test
-	public void testRename() throws IOException {
-		String pathname = "C:\\church_images\\burim";
-		File dir = new File(pathname);
-		
-		if(dir.isDirectory()) {
-			File[] files = dir.listFiles();
-			
-			for (File file : files) {
-				String newPath = pathname+"\\rename\\";
-				File newFile = new File(newPath+rename(file.getName())+".JPG");
-				
-				boolean result = file.renameTo(newFile);
-				
-				System.out.println(newPath+newFile.getName());
-				
-				
-//				Path ofile = file.toPath();
-//				Path movePath = Paths.get("C:\\Users\\ohjic\\PhpstormProjects\\member\\mem\\application\\controllers\\flat_member\\rename");
-//
-//				 
-//				Files.move(ofile , movePath.resolve(file.getName()));
-				
-			}
-		}
+	public void testSend() throws IOException {
+		// Recipient's email ID needs to be mentioned.
+	      String to = "gusfot@gmail.com";
+
+	      // Sender's email ID needs to be mentioned
+	      String from = "hyunlae.kim@ohjic.com";
+
+	      // Assuming you are sending email from localhost
+	      String host = "localhost";
+
+	      // Get system properties
+	      Properties properties = System.getProperties();
+
+	      // Setup mail server
+	      properties.setProperty("mail.smtp.host", host);
+
+	      // Get the default Session object.
+	      Session session = Session.getDefaultInstance(properties);
+
+	      try{
+	         // Create a default MimeMessage object.
+	         MimeMessage message = new MimeMessage(session);
+
+	         // Set From: header field of the header.
+	         message.setFrom(new InternetAddress(from));
+
+	         // Set To: header field of the header.
+	         message.addRecipient(Message.RecipientType.TO,
+	                                  new InternetAddress(to));
+
+	         // Set Subject: header field
+	         message.setSubject("This is the Subject Line!");
+
+	         // Now set the actual message
+	         message.setText("This is actual message");
+
+	         // Send message
+	         Transport.send(message);
+	         System.out.println("Sent message successfully....");
+	      }catch (MessagingException mex) {
+	         mex.printStackTrace();
+	      }
 	}
 	
 
-	private String rename(String originName) {
-		String newName = "";
-
-		newName =originName.replaceAll("[^0-9]", "");
-		return newName;
-	}
-	
-	@Test
-	public void test() {
-		for(int i=1994;i<2017;i++) {
-		String sql = "delete from kyo6011.kGroup where (year, k_part_idx, depth1_name) in (\n"
-					+"select year, k_part_idx, depth1_name from (\n"
-					+"select\n" 
-					+ i+" year,3 k_part_idx, ActivityName depth1_name,1 depth, ActivityName group_name, StartDate, EndDate,\n"
-					+"if(StartDate is null or StartDate ='', UNIX_TIMESTAMP(STR_TO_DATE(concat("+i+",'-01-01'),'%Y-%m-%d')) , if('"+i+"'= left(StartDate,4),UNIX_TIMESTAMP(STR_TO_DATE(StartDate,'%Y-%m-%d')), UNIX_TIMESTAMP(STR_TO_DATE(concat("+i+",'-01-01'),'%Y-%m-%d')))) start_date,\n"
-					+"if(EndDate is null or EndDate ='', UNIX_TIMESTAMP(STR_TO_DATE(concat("+i+"+1,'-01-01'),'%Y-%m-%d'))-1, if('"+i+"'= left(EndDate,4), UNIX_TIMESTAMP(STR_TO_DATE(EndDate,'%Y-%m-%d')), if('"+i+"'< left(EndDate,4),UNIX_TIMESTAMP(STR_TO_DATE(concat("+i+"+1,'-01-01'),'%Y-%m-%d'))-1,0))) end_date\n"
-					+"from ChurchActivity where ActivityName != '' and ActivityName !='1'\n" 
-					+"and (EndDate is null or EndDate ='')\n"
-					+"group by ActivityName\n"
-					+") a\n"
-					+"where year < left(StartDate,4)*1\n"
-					+")\n"
-					+";\n";
-		
-		System.out.println(sql);
-		
-		}
-	}
 	
 }

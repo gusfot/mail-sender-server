@@ -17,12 +17,14 @@
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven  />
 	
 	<context:property-placeholder location="classpath:properties/mem.properties" ignore-unresolvable="true"/>
 	<util:properties id="memProperties" location="classpath:properties/mem.properties" />
 	
 	<context:component-scan base-package="org.ohjic.mem" />
+	
+	<beans:import resource="classpath:/META-INF/client-context.xml" />
 
 
 </beans:beans>

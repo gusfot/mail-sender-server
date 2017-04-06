@@ -4,7 +4,6 @@
 package org.ohjic.mem.web;
 
 import org.ohjic.mem.rest.common.RestResponse;
-import org.ohjic.mem.vo.ResponseCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -35,7 +34,6 @@ public class MainController {
 
 		RestResponse res = new RestResponse();
 		res.setSuccess(true);
-		res.setResCode(ResponseCode.SUCCESS);
 		res.setData("welcome member_api of ohjic!");
 
 		return res;
@@ -46,7 +44,6 @@ public class MainController {
 
 		RestResponse res = new RestResponse();
 		res.setSuccess(true);
-		res.setResCode(ResponseCode.SUCCESS);
 		res.setData("welcome member_api of ohjic!");
 
 		return res;
